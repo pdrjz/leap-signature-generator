@@ -53,7 +53,7 @@
     <input type="email" id="email" placeholder="Enter your email" required><br>
 
     <!-- Toggle for Optional Line -->
-    <label for="toggleOptionalLine">Add an Optional Line:</label>
+    <label for="toggleOptionalLine">Add an Optional Line Below CA Lic.#:</label>
     <input type="checkbox" id="toggleOptionalLine" onchange="toggleField('optionalLineField')"><br>
 
     <!-- Optional Line Field -->
@@ -104,7 +104,7 @@
       // Locked address, license, and website
       const streetAddress = "111 Town Square Pl., Suite 401";
       const cityAddress = "Jersey City, NJ 07310";
-      const license = "Leap Insurance Agency Broker License: 0M58313";
+      const license = "CA License # 0M58313";
       const website = "www.leapeasy.com";
 
       // Build the signature HTML
@@ -129,6 +129,21 @@
       
       signature += `<br><em>${title}</em></td></tr>`;
 
+      // CA License Line
+      signature += `
+                  <tr>
+                    <td>
+                      <span>${license}</span>
+                    </td>
+                  </tr>`; 
+      
+      // Include optional line if toggled on
+       if (document.getElementById('toggleOptionalLine').checked && optionalLine) {
+        signature += `<tr><td><span>${optionalLine}</span></td></tr>`;
+      }
+
+
+
       // Include personal phone if toggled on
       if (document.getElementById('togglePhone').checked && phone) {
         signature += `<tr><td>m: ${phone}</td></tr>`;
@@ -141,15 +156,14 @@
 
       signature += `
                   <tr>
-                    <td><span style="color: #702572;">${streetAddress}</span><br>
-                    <span style="color: #702572;">${cityAddress}</span><br>
-                    <span style="color: #702572;">${license}</span></td>
+                    <td>
+                      <span style="color: #702572;">${streetAddress}</span><br>
+                      <span style="color: #702572;">${cityAddress}</span><br>
+                    
+                    </td>
                   </tr>`;
 
-      // Include optional line if toggled on
-      if (document.getElementById('toggleOptionalLine').checked && optionalLine) {
-        signature += `<tr><td><span style="color: #702572;">${optionalLine}</span></td></tr>`;
-      }
+
 
       signature += `
                   <tr>
