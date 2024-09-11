@@ -52,6 +52,16 @@
     <label for="email">Email:</label>
     <input type="email" id="email" placeholder="Enter your email" required><br>
 
+    <!-- Toggle for Optional Line -->
+    <label for="toggleOptionalLine">Add an Optional Line:</label>
+    <input type="checkbox" id="toggleOptionalLine" onchange="toggleField('optionalLineField')"><br>
+
+    <!-- Optional Line Field -->
+    <div id="optionalLineField" class="hidden">
+      <label for="optionalLine">Optional Line:</label>
+      <input type="text" id="optionalLine" placeholder="Enter additional information"><br>
+    </div>
+
     <button type="button" onclick="generateSignature()">Generate Signature</button>
   </form>
 
@@ -88,6 +98,8 @@
 
       let workPhone = document.getElementById('workPhone').value;
       workPhone = workPhone ? formatPhoneNumber(workPhone) : '';
+
+      const optionalLine = document.getElementById('optionalLine').value;
 
       // Locked address, license, and website
       const streetAddress = "111 Town Square Pl., Suite 401";
@@ -132,7 +144,14 @@
                     <td><span style="color: #702572;">${streetAddress}</span><br>
                     <span style="color: #702572;">${cityAddress}</span><br>
                     <span style="color: #702572;">${license}</span></td>
-                  </tr>
+                  </tr>`;
+
+      // Include optional line if toggled on
+      if (document.getElementById('toggleOptionalLine').checked && optionalLine) {
+        signature += `<tr><td><span style="color: #702572;">${optionalLine}</span></td></tr>`;
+      }
+
+      signature += `
                   <tr>
                     <td><a href="https://${website}" style="color: #000;">${website}</a></td>
                   </tr>
