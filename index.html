@@ -3,204 +3,606 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Email Signature Generator</title>
+  <title>Email Signature Generator - Leap Insurance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    .hidden {
+    /* ===== Leap Brand Tokens ===== */
+    :root {
+      --leap-purple:      #702572;
+      --leap-purple-700:  #5b1d5d;
+      --leap-purple-600:  #802982;
+      --leap-purple-100:  #f1e4f2;
+      --leap-purple-050:  #faf4fb;
+
+      --leap-gold:        #A39366;
+      --leap-gold-600:    #b6a378;
+      --leap-gold-100:    #efeadc;
+
+      --leap-gray:        #E2E5E9;
+      --leap-gray-200:    #c9cdd3;
+      --leap-gray-100:    #eef0f3;
+      --leap-gray-050:    #f6f7f9;
+
+      --leap-black:       #242225;
+      --leap-black-700:   #4a464c;
+      --leap-black-500:   #76727a;
+      --leap-black-300:   #a8a5ab;
+      --leap-white:       #ffffff;
+
+      --font-display: "Montserrat", Arial, sans-serif;
+      --font-body:    "Inter", Calibri, Arial, sans-serif;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+
+      --shadow-sm: 0 2px 6px rgba(36, 34, 37, 0.07);
+      --shadow-md: 0 6px 16px rgba(36, 34, 37, 0.08);
+      --shadow-brand: 0 12px 32px rgba(112, 37, 114, 0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--leap-black);
+      background: var(--leap-gray-050);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Header ===== */
+    .site-header {
+      background: var(--leap-purple);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-brand);
+    }
+
+    .site-header img {
+      height: 36px;
+      width: auto;
+    }
+
+    .site-header .divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    .site-header .header-label {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ===== Layout ===== */
+    .page-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .page-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 30px;
+      color: var(--leap-black);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--leap-black-500);
+      margin-bottom: 36px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      .two-col { grid-template-columns: 1fr; }
+      .site-header { padding: 16px 20px; }
+      .page-wrapper { padding: 32px 16px 60px; }
+    }
+
+    /* ===== Card ===== */
+    .card {
+      background: var(--leap-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      padding: 32px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--leap-gold);
+      margin-bottom: 20px;
+    }
+
+    /* ===== Form ===== */
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--leap-black-700);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      height: 42px;
+      padding: 0 14px;
+      border: 1.5px solid var(--leap-gray);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--leap-black);
+      background: var(--leap-white);
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: var(--leap-purple);
+      box-shadow: 0 0 0 3px var(--leap-purple-100);
+    }
+
+    input[type="text"]::placeholder,
+    input[type="email"]::placeholder {
+      color: var(--leap-black-300);
+    }
+
+    /* ===== Toggle Row ===== */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-row label {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--leap-black-700);
+      cursor: pointer;
+    }
+
+    /* Custom toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--leap-gray);
+      border-radius: var(--radius-pill, 999px);
+      transition: background 200ms ease;
+      cursor: pointer;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: var(--leap-white);
+      border-radius: 50%;
+      box-shadow: var(--shadow-sm);
+      transition: transform 200ms ease;
+    }
+
+    .toggle-switch input:checked + .toggle-track {
+      background: var(--leap-purple);
+    }
+
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(16px);
+    }
+
+    .collapsible {
       display: none;
+      margin-bottom: 18px;
+    }
+
+    .collapsible.open {
+      display: block;
+    }
+
+    /* ===== Button ===== */
+    .btn-primary {
+      width: 100%;
+      height: 48px;
+      background: var(--leap-purple);
+      color: var(--leap-white);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 180ms ease, box-shadow 180ms ease, transform 100ms ease;
+      margin-top: 8px;
+    }
+
+    .btn-primary:hover {
+      background: var(--leap-purple-600);
+      box-shadow: var(--shadow-brand);
+    }
+
+    .btn-primary:active {
+      background: var(--leap-purple-700);
+      transform: scale(0.99);
+    }
+
+    /* ===== Preview Panel ===== */
+    .preview-label {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--leap-gold);
+      margin-bottom: 20px;
+    }
+
+    .preview-instructions {
+      font-size: 13px;
+      color: var(--leap-black-500);
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      background: var(--leap-purple-050);
+      border-left: 3px solid var(--leap-purple);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    #signatureOutput {
+      min-height: 120px;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      color: var(--leap-black-300);
+      font-size: 14px;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .empty-state svg {
+      opacity: 0.4;
+    }
+
+    /* ===== Copy Button ===== */
+    .btn-copy {
+      margin-top: 16px;
+      width: 100%;
+      height: 40px;
+      background: transparent;
+      border: 1.5px solid var(--leap-purple);
+      color: var(--leap-purple);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease;
+      display: none;
+    }
+
+    .btn-copy:hover {
+      background: var(--leap-purple-100);
+    }
+
+    .btn-copy.visible {
+      display: block;
+    }
+
+    .copy-hint {
+      font-size: 12px;
+      color: var(--leap-black-500);
+      text-align: center;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .copy-hint.visible {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <h2>Email Signature Generator</h2>
-  <form id="signatureForm">
-    <label for="name">Name:</label>
-    <input type="text" id="name" placeholder="Enter your name" required><br>
 
-    <!-- Toggle for Pronouns -->
-    <label for="togglePronoun">Include Pronoun:</label>
-    <input type="checkbox" id="togglePronoun" onchange="toggleField('pronounField')"><br>
+  <!-- Header -->
+  <header class="site-header">
+    <img src="assets/leap-horizontal-white.svg" alt="Leap Insurance">
+    <div class="divider"></div>
+    <span class="header-label">Signature Generator</span>
+  </header>
 
-    <!-- Pronoun Field -->
-    <div id="pronounField" class="hidden">
-      <label for="pronoun">Pronoun:</label>
-      <input type="text" id="pronoun" placeholder="e.g., he/him, she/her, they/them"><br>
+  <!-- Page -->
+  <main class="page-wrapper">
+    <h1 class="page-title">Email Signature Generator</h1>
+    <p class="page-subtitle">Fill in your details below to generate your branded Leap email signature.</p>
+
+    <div class="two-col">
+
+      <!-- Form Card -->
+      <div class="card">
+        <div class="card-title">Your Details</div>
+        <form id="signatureForm" onsubmit="return false;">
+
+          <div class="field-group">
+            <label for="name">Full name</label>
+            <input type="text" id="name" placeholder="e.g. Alex Johnson" required>
+          </div>
+
+          <!-- Pronouns toggle -->
+          <div class="toggle-row" onclick="toggleSwitch('togglePronoun', 'pronounField')">
+            <label>Include pronouns</label>
+            <div class="toggle-switch">
+              <input type="checkbox" id="togglePronoun">
+              <div class="toggle-track"></div>
+            </div>
+          </div>
+          <div id="pronounField" class="collapsible">
+            <div class="field-group">
+              <label for="pronoun">Pronouns</label>
+              <input type="text" id="pronoun" placeholder="e.g. she/her, he/him, they/them">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="title">Job title</label>
+            <input type="text" id="title" placeholder="e.g. Senior Account Manager" required>
+          </div>
+
+          <div class="field-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" placeholder="you@leapeasy.com" required>
+          </div>
+
+          <!-- Mobile phone toggle -->
+          <div class="toggle-row" onclick="toggleSwitch('togglePhone', 'phoneField')">
+            <label>Include mobile phone</label>
+            <div class="toggle-switch">
+              <input type="checkbox" id="togglePhone">
+              <div class="toggle-track"></div>
+            </div>
+          </div>
+          <div id="phoneField" class="collapsible">
+            <div class="field-group">
+              <label for="phone">Mobile phone</label>
+              <input type="text" id="phone" placeholder="e.g. 2015550100">
+            </div>
+          </div>
+
+          <!-- Work phone toggle -->
+          <div class="toggle-row" onclick="toggleSwitch('toggleWorkPhone', 'workPhoneField')">
+            <label>Include work phone</label>
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleWorkPhone">
+              <div class="toggle-track"></div>
+            </div>
+          </div>
+          <div id="workPhoneField" class="collapsible">
+            <div class="field-group">
+              <label for="workPhone">Work phone</label>
+              <input type="text" id="workPhone" placeholder="e.g. 2015550101">
+            </div>
+          </div>
+
+          <!-- Optional line toggle -->
+          <div class="toggle-row" onclick="toggleSwitch('toggleOptionalLine', 'optionalLineField')">
+            <label>Add optional line below CA Lic.#</label>
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleOptionalLine">
+              <div class="toggle-track"></div>
+            </div>
+          </div>
+          <div id="optionalLineField" class="collapsible">
+            <div class="field-group">
+              <label for="optionalLine">Optional line</label>
+              <input type="text" id="optionalLine" placeholder="Additional information">
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary" onclick="generateSignature()">Generate signature</button>
+        </form>
+      </div>
+
+      <!-- Preview Card -->
+      <div class="card">
+        <div class="preview-label">Preview</div>
+        <div class="preview-instructions">
+          Once generated, click "copy signature" or select all content in the preview below and paste it directly into your Gmail settings.
+        </div>
+        <div id="signatureOutput">
+          <div class="empty-state">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <polyline points="3 7 12 13 21 7"/>
+            </svg>
+            <span>Your signature will appear here</span>
+          </div>
+        </div>
+        <button class="btn-copy" id="copyBtn" onclick="copySignature()">Copy signature</button>
+        <div class="copy-hint" id="copyHint">Select everything in the preview and paste into your email client.</div>
+      </div>
+
     </div>
-
-    <label for="title">Title:</label>
-    <input type="text" id="title" placeholder="Enter your title" required><br>
-
-    <!-- Toggle for Personal Phone -->
-    <label for="togglePhone">Include Mobile Phone:</label>
-    <input type="checkbox" id="togglePhone" onchange="toggleField('phoneField')"><br>
-
-    <!-- Personal Phone Field -->
-    <div id="phoneField" class="hidden">
-      <label for="phone">Mobile Phone:</label>
-      <input type="text" id="phone" placeholder="Enter your mobile phone number"><br>
-    </div>
-
-    <!-- Toggle for Work Phone -->
-    <label for="toggleWorkPhone">Include Work Phone:</label>
-    <input type="checkbox" id="toggleWorkPhone" onchange="toggleField('workPhoneField')"><br>
-
-    <!-- Work Phone Field -->
-    <div id="workPhoneField" class="hidden">
-      <label for="workPhone">Work Phone:</label>
-      <input type="text" id="workPhone" placeholder="Enter your work phone number"><br>
-    </div>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" placeholder="Enter your email" required><br>
-
-    <!-- Toggle for Optional Line -->
-    <label for="toggleOptionalLine">Add an Optional Line Below CA Lic.#:</label>
-    <input type="checkbox" id="toggleOptionalLine" onchange="toggleField('optionalLineField')"><br>
-
-    <!-- Optional Line Field -->
-    <div id="optionalLineField" class="hidden">
-      <label for="optionalLine">Optional Line:</label>
-      <input type="text" id="optionalLine" placeholder="Enter additional information"><br>
-    </div>
-
-    <button type="button" onclick="generateSignature()">Generate Signature</button>
-  </form>
-
-  <h3>Your Signature:</h3>
-  <div id="signatureOutput" style="border: 1px solid #000; padding: 10px; width: 500px;"></div>
+  </main>
 
   <script>
-    // Function to toggle fields
-    function toggleField(fieldId) {
+    function toggleSwitch(checkboxId, fieldId) {
+      const checkbox = document.getElementById(checkboxId);
+      checkbox.checked = !checkbox.checked;
       const field = document.getElementById(fieldId);
-      if (field.classList.contains('hidden')) {
-        field.classList.remove('hidden');
-      } else {
-        field.classList.add('hidden');
-      }
+      field.classList.toggle('open', checkbox.checked);
     }
 
-    // Function to format the phone number
     function formatPhoneNumber(phone) {
       const cleaned = ('' + phone).replace(/\D/g, '');
       const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-      if (match) {
-        return `${match[1]}.${match[2]}.${match[3]}`;
-      }
+      if (match) return `${match[1]}.${match[2]}.${match[3]}`;
       return phone;
     }
 
     function generateSignature() {
-      const name = document.getElementById('name').value;
-      const pronoun = document.getElementById('pronoun').value;
-      const title = document.getElementById('title').value;
-      const phone = formatPhoneNumber(document.getElementById('phone').value);
-      const email = document.getElementById('email').value;
-
-      let workPhone = document.getElementById('workPhone').value;
+      const name = document.getElementById('name').value.trim();
+      const pronoun = document.getElementById('pronoun').value.trim();
+      const title = document.getElementById('title').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = formatPhoneNumber(document.getElementById('phone').value.trim());
+      let workPhone = document.getElementById('workPhone').value.trim();
       workPhone = workPhone ? formatPhoneNumber(workPhone) : '';
+      const optionalLine = document.getElementById('optionalLine').value.trim();
 
-      const optionalLine = document.getElementById('optionalLine').value;
+      if (!name || !title || !email) {
+        document.getElementById('signatureOutput').innerHTML = `
+          <div class="empty-state" style="color:#CE302A;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span>Please fill in name, title, and email.</span>
+          </div>`;
+        return;
+      }
 
-      // Locked address, license, and website
       const streetAddress = "111 Town Square Pl., Suite 401";
       const cityAddress = "Jersey City, NJ 07310";
       const license = "CA License # 0M58313";
       const website = "www.leapeasy.com";
 
-      // Build the signature HTML
       let signature = `
-        <!-- Start Copy -->
-        <div><br>
-          <table cellspacing="0" width="500" cellpadding="0" border="0">
-            <tr>
-              <td width="80" valign="top" style="padding: 0px 9px 0px 0px; vertical-align: top;">
-                <img src="https://www.leapeasy.com/wp-content/uploads/2022/06/Leap-Logo-Purple.png" width="80" alt="Leap Logo" style="margin-bottom: 10px;">
-                <img src="https://www.leapeasy.com/wp-content/uploads/2022/06/NAA-TopEmployer-Logo-2022.png" width="80" alt="Leap Logo" style="margin-bottom: 10px;">
-              </td>
-              <td valign="top" style="border-left: 2px solid #702572; padding-left: 9px;">
-                <table cellspacing="0" cellpadding="0" border="0" style="line-height: 1.2; font-family: Questrial, Arial, Helvetica, sans-serif; font-size: 80%; color: #000;">
-                  <tr>
-                    <td><span style="font-size: 1.2em; color: #702572;">${name}</span>`;
-      
-      // Include pronoun if toggled on
+        <table cellspacing="0" width="500" cellpadding="0" border="0" style="font-family: Questrial, Arial, Helvetica, sans-serif;">
+          <tr>
+            <td width="80" valign="top" style="padding: 0px 9px 0px 0px; vertical-align: top;">
+              <img src="https://www.leapeasy.com/wp-content/uploads/2022/06/Leap-Logo-Purple.png" width="80" alt="Leap Logo" style="display:block; margin-bottom: 10px;">
+              <img src="https://www.leapeasy.com/wp-content/uploads/2022/06/NAA-TopEmployer-Logo-2022.png" width="80" alt="NAA Top Employer 2022" style="display:block; margin-bottom: 10px;">
+            </td>
+            <td valign="top" style="border-left: 2px solid #702572; padding-left: 9px;">
+              <table cellspacing="0" cellpadding="0" border="0" style="line-height: 1.2; font-family: Questrial, Arial, Helvetica, sans-serif; font-size: 80%; color: #000;">
+                <tr>
+                  <td>
+                    <span style="font-size: 1.2em; color: #702572;">${name}</span>`;
+
       if (document.getElementById('togglePronoun').checked && pronoun) {
         signature += `<span style="font-size: 0.9em; color: #702572;"> (${pronoun})</span>`;
       }
-      
-      signature += `<br><em>${title}</em></td></tr>`;
 
-      // CA License Line
-      signature += `
-                  <tr>
-                    <td>
-                      <span>${license}</span>
-                    </td>
-                  </tr>`; 
-      
-      // Include optional line if toggled on
-       if (document.getElementById('toggleOptionalLine').checked && optionalLine) {
+      signature += `<br><em>${title}</em></td></tr>
+                <tr><td><span>${license}</span></td></tr>`;
+
+      if (document.getElementById('toggleOptionalLine').checked && optionalLine) {
         signature += `<tr><td><span>${optionalLine}</span></td></tr>`;
       }
 
-
-
-      // Include personal phone if toggled on
       if (document.getElementById('togglePhone').checked && phone) {
         signature += `<tr><td>m: ${phone}</td></tr>`;
       }
 
-      // Include work phone if toggled on
       if (document.getElementById('toggleWorkPhone').checked && workPhone) {
         signature += `<tr><td>w: ${workPhone}</td></tr>`;
       }
 
       signature += `
-                  <tr>
-                    <td>
-                      <span style="color: #702572;">${streetAddress}</span><br>
-                      <span style="color: #702572;">${cityAddress}</span><br>
-                    
-                    </td>
-                  </tr>`;
+                <tr>
+                  <td>
+                    <span style="color: #702572;">${streetAddress}</span><br>
+                    <span style="color: #702572;">${cityAddress}</span>
+                  </td>
+                </tr>
+                <tr><td><a href="https://${website}" style="color: #000;">${website}</a></td></tr>
+                <tr><td><a href="mailto:${email}" style="color: #000;">${email}</a></td></tr>
+                <tr><td style="padding-top: 8px;">Follow us:</td></tr>
+                <tr>
+                  <td>
+                    <a href="https://www.linkedin.com/company/leap-insurance-agency-llc/" target="_blank">
+                      <img src="https://www.leapeasy.com/wp-content/uploads/2022/06/liicon2.png" width="20" height="20" alt="LinkedIn" style="display:inline-block;"></a>
+                    <a href="https://x.com/LeapInsurance" target="_blank">
+                      <img src="https://pbs.twimg.com/profile_images/1683899100922511378/5lY42eHs_bigger.jpg" width="20" height="20" alt="X" style="display:inline-block;"></a>
+                    <a href="https://www.instagram.com/leap_insurance/" target="_blank">
+                      <img src="https://www.leapeasy.com/wp-content/uploads/2024/09/125017210_695567774670736_7782461285201319161_n-1.png" width="20" height="20" alt="Instagram" style="display:inline-block;"></a>
+                    <a href="https://www.facebook.com/LeapInsurance" target="_blank">
+                      <img src="https://www.leapeasy.com/wp-content/uploads/2024/09/Facebook_Logo_Primary.png" width="20" height="20" alt="Facebook" style="display:inline-block;"></a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>`;
 
+      document.getElementById('signatureOutput').innerHTML = signature;
+      document.getElementById('copyBtn').classList.add('visible');
+      document.getElementById('copyHint').classList.add('visible');
+    }
 
+    function copySignature() {
+      const output = document.getElementById('signatureOutput');
+      const range = document.createRange();
+      range.selectNodeContents(output);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
 
-      signature += `
-                  <tr>
-                    <td><a href="https://${website}" style="color: #000;">${website}</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="mailto:${email}" style="color: #000;">${email}</a></td>
-                  </tr>
-                  <tr>
-                    <td style="padding-top: 8px;">Follow us:</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <a href="https://www.linkedin.com/company/leap-insurance-agency-llc/" target="_blank">
-                        <img src="https://www.leapeasy.com/wp-content/uploads/2022/06/liicon2.png" width="20" height="20" alt="LinkedIn"></a>
-                      <a href="https://x.com/LeapInsurance" target="_blank">
-                        <img src="https://pbs.twimg.com/profile_images/1683899100922511378/5lY42eHs_bigger.jpg" width="20" height="20" alt="X"></a>
-                      <a href="https://www.instagram.com/leap_insurance/" target="_blank">
-                        <img src="https://www.leapeasy.com/wp-content/uploads/2024/09/125017210_695567774670736_7782461285201319161_n-1.png" width="20" height="20" alt="Instagram"></a>
-                      <a href="https://www.facebook.com/LeapInsurance" target="_blank">
-                        <img src="https://www.leapeasy.com/wp-content/uploads/2024/09/Facebook_Logo_Primary.png" width="20" height="20" alt="Facebook"></a>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <!-- End Copy -->
-      `;
-
-      // Display the signature
-      document.getElementById('signatureOutput').innerHTML = `
-        <p>⬇️ Start copying below ⬇️</p>
-        ${signature}
-        <p>⬆️ Stop copying above ⬆️</p>
-      `;
+      try {
+        document.execCommand('copy');
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied!';
+        btn.style.background = '#f1e4f2';
+        setTimeout(() => {
+          btn.textContent = 'Copy signature';
+          btn.style.background = '';
+        }, 2000);
+      } catch (e) {
+        // fallback: selection is still active, user can Ctrl+C
+      }
     }
   </script>
 </body>
